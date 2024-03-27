@@ -1,20 +1,25 @@
-def par_checker(string):
-    stack = []  # инициализируем стек
+import telebot
 
-    for s in string:  # читаем строку посимвольно
-        if s == "(":  # если открывающая скобка,
-            stack.append(s)  # добавляем ее в стек
-        elif s == ")":
-            # если встретилась закрывающая скобка, то проверяем
-            # пуст ли стек и является ли верхний элемент - открывающей скобкой
-            if len(stack) > 0 and stack[-1] == "(":
-                stack.pop()  # удаляем из стека
-            else:  # иначе завершаем функцию с False
-                return False
-    # если стек пустой, то незакрытых скобок не осталось
-    # значит возвращаем True, иначе - False
-    return len(stack) == 0
+TOKEN = "6312534518:AAE1sV9pXifYAwk3GetPRhqRkUM2V6s-KMY"
+
+bot = telebot.TeleBot(TOKEN)
 
 
-a=("(5+6)*(7+8)/(4+3)")
-print(par_checker(a))
+# Обрабатываются все сообщения, содержащие команды '/start' or '/help'.
+@bot.message_handler(commands=['start', 'help'])
+def handle_start_help(message):
+    bot.send_message(message.chat.id, f"Welcome, {message.chat.username}")
+
+
+# Обрабатывается все документы и аудиозаписи
+@bot.message_handler(content_types=['document', 'audio'])
+def handle_docs_audio(message):
+    pass
+
+
+@bot.message_handler(content_types=['photo', ])
+def say_lmao(message: telebot.types.Message):
+    bot.reply_to(message, 'Nice meme XDD')
+
+
+bot.polling(none_stop=True)
